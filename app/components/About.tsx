@@ -1,38 +1,32 @@
 import Section from "./Section";
-import { about, experience } from "@/lib/data";
+import Icon from "./Icon";
+import { about, principles } from "@/lib/data";
 
 export default function About() {
   return (
-    <Section id="about" title="소개">
-      <div className="grid gap-12 sm:grid-cols-5">
-        <div className="space-y-4 text-zinc-600 dark:text-zinc-400 sm:col-span-3">
-          {about.map((p, i) => (
-            <p key={i} className="leading-8">
-              {p}
-            </p>
+    <Section id="about" title="소개" label="About" icon="user">
+      <div className="space-y-4 text-base leading-8 text-muted">
+        {about.map((p, i) => (
+          <p key={i}>{p}</p>
+        ))}
+      </div>
+
+      {principles.length > 0 && (
+        <div className="mt-12 grid gap-5 sm:grid-cols-3">
+          {principles.map((pr) => (
+            <div
+              key={pr.title}
+              className="rounded-2xl border border-border bg-card p-6"
+            >
+              <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent-soft text-accent">
+                <Icon name={pr.icon} size={20} />
+              </span>
+              <h3 className="mt-4 font-semibold">{pr.title}</h3>
+              <p className="mt-2 text-sm leading-7 text-muted">{pr.desc}</p>
+            </div>
           ))}
         </div>
-
-        {experience.length > 0 && (
-          <div className="sm:col-span-2">
-            <h3 className="mb-4 font-mono text-sm uppercase tracking-wider text-zinc-400">
-              Experience
-            </h3>
-            <ul className="space-y-6">
-              {experience.map((e, i) => (
-                <li key={i}>
-                  <p className="font-mono text-xs text-zinc-400">{e.period}</p>
-                  <p className="mt-1 font-medium">{e.title}</p>
-                  <p className="text-sm text-zinc-500">{e.org}</p>
-                  <p className="mt-1 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
-                    {e.desc}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
+      )}
     </Section>
   );
 }

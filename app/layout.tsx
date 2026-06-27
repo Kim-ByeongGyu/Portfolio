@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Noto_Sans_KR } from "next/font/google";
 import "./globals.css";
 import { profile } from "@/lib/data";
 
@@ -13,11 +13,17 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const notoKr = Noto_Sans_KR({
+  variable: "--font-noto-kr",
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+});
+
 export const metadata: Metadata = {
-  title: `${profile.nameEn} · Portfolio`,
-  description: `${profile.role} — ${profile.tagline}`,
+  title: `${profile.nameEn} · ${profile.role}`,
+  description: `${profile.name} (${profile.nameEn}) — ${profile.tagline}`,
   openGraph: {
-    title: `${profile.nameEn} · Portfolio`,
+    title: `${profile.nameEn} · ${profile.role}`,
     description: profile.tagline,
     type: "website",
   },
@@ -31,7 +37,7 @@ export default function RootLayout({
   return (
     <html
       lang="ko"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth`}
+      className={`${geistSans.variable} ${geistMono.variable} ${notoKr.variable} h-full antialiased scroll-smooth`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
