@@ -155,6 +155,35 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
                 </>
               )}
 
+              {/* 트러블슈팅 */}
+              {project.troubleshooting && project.troubleshooting.length > 0 && (
+                <>
+                  <h4 className="mt-7 mb-3 text-sm font-semibold text-muted">트러블슈팅</h4>
+                  <div className="space-y-3">
+                    {project.troubleshooting.map((t) => (
+                      <div
+                        key={t.title}
+                        className="rounded-xl border border-border bg-card p-4"
+                      >
+                        <p className="font-semibold">{t.title}</p>
+                        <div className="mt-2 flex gap-2 text-sm leading-6">
+                          <span className="mt-0.5 shrink-0 rounded bg-rose-500/10 px-1.5 py-0.5 text-xs font-medium text-rose-500">
+                            문제
+                          </span>
+                          <span className="text-foreground/80">{t.problem}</span>
+                        </div>
+                        <div className="mt-2 flex gap-2 text-sm leading-6">
+                          <span className="mt-0.5 shrink-0 rounded bg-emerald-500/10 px-1.5 py-0.5 text-xs font-medium text-emerald-500">
+                            해결
+                          </span>
+                          <span className="text-foreground/80">{t.solution}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+
               {/* 스크린샷 갤러리 */}
               {project.images && project.images.length > 0 && (
                 <>

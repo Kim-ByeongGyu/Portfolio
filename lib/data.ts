@@ -119,6 +119,7 @@ export type Project = {
   role?: string;
   period?: string;
   team?: string;
+  troubleshooting?: { title: string; problem: string; solution: string }[];
   github?: string;
   demo?: string;
 };
@@ -149,6 +150,15 @@ export const projects: Project[] = [
     role: "Backend",
     period: "2025",
     team: "팀 프로젝트",
+    troubleshooting: [
+      {
+        title: "구독 플랜 변경 시 결제 이력 정합성",
+        problem:
+          "구독 플랜 테이블에 이름·가격을 직접 두고 설계했는데, 플랜 수정 기능을 만들면서 문제가 드러났습니다. 결제 이력에는 결제 '당시'의 플랜 이름·가격이 남아야 하지만, 플랜을 수정하면 이력 조회 시 변경된 최신 값이 출력되었습니다.",
+        solution:
+          "이력성 데이터는 시점의 값을 보존해야 한다는 점을 놓친 설계였습니다. 당시 테이블 구조를 크게 분리하기 어려운 상황이라, 결제 이력에 '결제 시점의 플랜 이름·가격'을 스냅샷으로 저장하는 컬럼을 추가해 정합성을 확보했습니다. 이 경험으로 이력·트랜잭션 데이터는 가변 마스터 데이터를 참조만 하지 말고 시점 값을 함께 저장해야 한다는 설계 원칙을 체득했습니다.",
+      },
+    ],
     github: "https://github.com/Kim-ByeongGyu/univ-us-be",
     demo: "",
   },
@@ -175,6 +185,22 @@ export const projects: Project[] = [
     role: "Backend",
     period: "2024.07 – 2024.09",
     team: "4인 팀 · 멋쟁이사자처럼",
+    troubleshooting: [
+      {
+        title: "좋아요 중복 등록 방지",
+        problem:
+          "한 사용자가 같은 게시글에 여러 번 좋아요를 누를 수 있는 문제가 있었습니다.",
+        solution:
+          "userId + postId 기준으로 기존 좋아요 여부를 먼저 조회한 뒤, 존재하면 취소하고 없으면 생성하는 토글 방식으로 구현했습니다. 데이터가 많아질수록 조회 비용이 늘 수 있다는 한계를 인지하고, 복합 유니크 인덱스·캐시 적용을 개선 방향으로 정리했습니다.",
+      },
+      {
+        title: "JWT vs 세션 인증 방식 선택",
+        problem:
+          "인증 방식을 세션 기반과 JWT 중 무엇으로 할지 결정해야 했습니다.",
+        solution:
+          "AccessToken 검증 시 서버가 별도 세션 저장소를 조회하지 않아도 되는 점에서 JWT가 프로젝트 구조에 더 적합하다고 판단했습니다. 다만 로그아웃·재발급 보안을 위해 RefreshToken은 DB에 저장하고 재발급 시 검증하는 구조로 구현했습니다.",
+      },
+    ],
     github: "https://github.com/Kim-ByeongGyu/GRIP_TEAM_EPARI",
     demo: "",
   },
