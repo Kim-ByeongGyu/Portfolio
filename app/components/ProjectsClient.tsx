@@ -1,18 +1,85 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import Icon from "./Icon";
-import type { Project } from "@/lib/data";
+import type { Project, ProjectImage } from "@/lib/data";
+
+type GalleryItem = {
+  key: string;
+  title: string;
+  section: string;
+  images: ProjectImage[];
+  isGroup: boolean;
+};
+
+type GallerySection = {
+  title: string;
+  items: GalleryItem[];
+};
+
+type LightboxState = {
+  title: string;
+  images: ProjectImage[];
+};
+
+function buildGallerySections(images: ProjectImage[]): GallerySection[] {
+  const items: GalleryItem[] = [];
+  const groups = new Map<string, GalleryItem>();
+
+  images.forEach((image) => {
+    const section = image.section ?? "화면";
+
+    if (!image.group) {
+      items.push({
+        key: image.src,
+        title: image.caption,
+        section,
+        images: [image],
+        isGroup: false,
+      });
+      return;
+    }
+
+    const group = groups.get(image.group);
+    if (group) {
+      group.images.push(image);
+      return;
+    }
+
+    const newGroup = {
+      key: `group:${image.group}`,
+      title: image.group,
+      section,
+      images: [image],
+      isGroup: true,
+    };
+    groups.set(image.group, newGroup);
+    items.push(newGroup);
+  });
+
+  return items.reduce<GallerySection[]>((sections, item) => {
+    const section = sections.find((candidate) => candidate.title === item.section);
+    if (section) {
+      section.items.push(item);
+      return sections;
+    }
+
+    sections.push({ title: item.section, items: [item] });
+    return sections;
+  }, []);
+}
 
 export default function ProjectsClient({ projects }: { projects: Project[] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const [lightbox, setLightbox] = useState<string | null>(null);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
+  const [lightbox, setLightbox] = useState<LightboxState | null>(null);
 
   const project = openIndex !== null ? projects[openIndex] : null;
+  const gallerySections = useMemo(
+    () => (project?.images ? buildGallerySections(project.images) : []),
+    [project]
+  );
+  const canUseDocument = typeof document !== "undefined";
 
   const close = useCallback(() => {
     if (lightbox) setLightbox(null);
@@ -41,7 +108,8 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
           <button
             key={p.title}
             onClick={() => setOpenIndex(i)}
-            className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card text-left transition-all hover:-translate-y-1 hover:border-accent/40 hover:shadow-lg hover:shadow-black/5"
+            aria-label={`${p.title} 프로젝트 상세 보기`}
+            className="group flex flex-col overflow-hidden rounded-lg border border-border bg-card text-left transition-all hover:-translate-y-1 hover:border-accent/40 hover:shadow-lg hover:shadow-black/5"
           >
             {/* 커버 */}
             {p.images && p.images.length > 0 ? (
@@ -63,7 +131,7 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
             )}
 
             {/* 본문 */}
-            <div className="flex flex-1 flex-col p-6">
+            <div className="flex flex-1 flex-col p-5 sm:p-6">
               <div className="flex flex-wrap items-center gap-2">
                 <h3 className="text-lg font-bold tracking-tight">{p.title}</h3>
                 {p.role && (
@@ -73,9 +141,32 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
                 )}
               </div>
               <p className="mt-1 text-sm text-muted">{p.subtitle}</p>
-              <p className="mt-3 line-clamp-2 flex-1 text-sm leading-6 text-muted">
-                {p.description}
-              </p>
+              {p.metrics && p.metrics.length > 0 && (
+                <dl className="mt-4 grid grid-cols-3 gap-2">
+                  {p.metrics.map((metric) => (
+                    <div key={metric.label} className="rounded-lg border border-border bg-background/40 px-2.5 py-2">
+                      <dt className="text-lg font-bold tracking-tight text-accent">{metric.value}</dt>
+                      <dd className="mt-0.5 text-[11px] leading-4 text-muted">{metric.label}</dd>
+                    </div>
+                  ))}
+                </dl>
+              )}
+              {p.cardPoints && p.cardPoints.length > 0 ? (
+                <ul className="mt-4 flex-1 space-y-2">
+                  {p.cardPoints.map((point) => (
+                    <li key={point} className="flex gap-2 text-sm leading-6 text-foreground/80">
+                      <span className="mt-0.5 text-accent">
+                        <Icon name="check" size={15} />
+                      </span>
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-3 line-clamp-2 flex-1 text-sm leading-6 text-muted">
+                  {p.description}
+                </p>
+              )}
               <ul className="mt-4 flex flex-wrap gap-1.5">
                 {p.tags.slice(0, 5).map((t) => (
                   <li
@@ -101,17 +192,17 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
       </div>
 
       {/* 상세 모달 (Portal로 body에 렌더 — 조상의 transform 영향 회피) */}
-      {mounted && project && createPortal(
+      {canUseDocument && project && createPortal(
         <div
           className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm sm:p-6"
           onClick={close}
         >
           <div
-            className="relative flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-2xl"
+            className="relative flex max-h-[92vh] w-full max-w-7xl flex-col overflow-hidden rounded-lg border border-border bg-background shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             {/* 헤더 (고정) */}
-            <div className="flex shrink-0 items-start justify-between gap-4 border-b border-border bg-background px-7 py-5">
+            <div className="flex shrink-0 items-start justify-between gap-4 border-b border-border bg-background px-6 py-5 sm:px-8 lg:px-10">
               <div>
                 <div className="flex flex-wrap items-center gap-2">
                   <h3 className="text-xl font-bold tracking-tight">{project.title}</h3>
@@ -136,8 +227,64 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
             </div>
 
             {/* 본문 (스크롤) */}
-            <div className="flex-1 overflow-y-auto px-7 py-6">
-              <p className="text-sm leading-7 text-foreground/85">{project.description}</p>
+            <div className="flex-1 overflow-y-auto px-6 py-6 sm:px-8 lg:px-10">
+              <p className="max-w-5xl text-base leading-8 text-foreground/85">{project.description}</p>
+
+              {project.metrics && project.metrics.length > 0 && (
+                <dl className="mt-5 grid grid-cols-3 gap-3">
+                  {project.metrics.map((metric) => (
+                    <div key={metric.label} className="rounded-lg border border-border bg-card px-4 py-3">
+                      <dt className="text-2xl font-bold tracking-tight text-accent">{metric.value}</dt>
+                      <dd className="mt-1 text-xs leading-5 text-muted">{metric.label}</dd>
+                    </div>
+                  ))}
+                </dl>
+              )}
+
+              {project.scope && project.scope.length > 0 && (
+                <>
+                  <h4 className="mt-7 mb-3 text-sm font-semibold text-muted">담당 범위</h4>
+                  <div className="grid gap-3 md:grid-cols-3">
+                    {project.scope.map((scope) => (
+                      <section key={scope.label} className="rounded-lg border border-border bg-card p-4">
+                        <h5 className="font-mono text-xs font-semibold text-accent">{scope.label}</h5>
+                        <ul className="mt-3 space-y-2">
+                          {scope.items.map((item) => (
+                            <li key={item} className="flex gap-2 text-sm leading-6 text-foreground/80">
+                              <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </section>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {project.flows && project.flows.length > 0 && (
+                <>
+                  <h4 className="mt-7 mb-3 text-sm font-semibold text-muted">아키텍처 / 핵심 흐름</h4>
+                  <div className="grid gap-4 lg:grid-cols-3">
+                    {project.flows.map((flow) => (
+                      <section key={flow.title} className="rounded-lg border border-border bg-card p-4">
+                        <h5 className="font-semibold">{flow.title}</h5>
+                        <p className="mt-2 text-sm leading-6 text-foreground/75">{flow.summary}</p>
+                        <ol className="mt-4 space-y-2">
+                          {flow.steps.map((step, index) => (
+                            <li key={step} className="flex items-center gap-2 text-sm text-foreground/85">
+                              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-accent-soft font-mono text-[11px] font-semibold text-accent">
+                                {index + 1}
+                              </span>
+                              <span>{step}</span>
+                            </li>
+                          ))}
+                        </ol>
+                      </section>
+                    ))}
+                  </div>
+                </>
+              )}
 
               {project.highlights.length > 0 && (
                 <>
@@ -163,7 +310,7 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
                     {project.troubleshooting.map((t) => (
                       <div
                         key={t.title}
-                        className="rounded-xl border border-border bg-card p-4"
+                        className="rounded-lg border border-border bg-card p-4"
                       >
                         <p className="font-semibold">{t.title}</p>
                         <div className="mt-2 flex gap-2 text-sm leading-6">
@@ -172,12 +319,28 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
                           </span>
                           <span className="text-foreground/80">{t.problem}</span>
                         </div>
+                        {t.cause && (
+                          <div className="mt-2 flex gap-2 text-sm leading-6">
+                            <span className="mt-0.5 shrink-0 rounded bg-amber-500/10 px-1.5 py-0.5 text-xs font-medium text-amber-500">
+                              원인
+                            </span>
+                            <span className="text-foreground/80">{t.cause}</span>
+                          </div>
+                        )}
                         <div className="mt-2 flex gap-2 text-sm leading-6">
                           <span className="mt-0.5 shrink-0 rounded bg-emerald-500/10 px-1.5 py-0.5 text-xs font-medium text-emerald-500">
                             해결
                           </span>
                           <span className="text-foreground/80">{t.solution}</span>
                         </div>
+                        {t.verification && (
+                          <div className="mt-2 flex gap-2 text-sm leading-6">
+                            <span className="mt-0.5 shrink-0 rounded bg-sky-500/10 px-1.5 py-0.5 text-xs font-medium text-sky-500">
+                              검증
+                            </span>
+                            <span className="text-foreground/80">{t.verification}</span>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -185,28 +348,63 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
               )}
 
               {/* 스크린샷 갤러리 */}
-              {project.images && project.images.length > 0 && (
+              {gallerySections.length > 0 && (
                 <>
                   <h4 className="mt-7 mb-3 text-sm font-semibold text-muted">화면</h4>
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    {project.images.map((img) => (
-                      <figure key={img.src} className="overflow-hidden rounded-xl border border-border">
-                        <button
-                          onClick={() => setLightbox(img.src)}
-                          className="block w-full"
-                        >
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={img.src}
-                            alt={img.caption}
-                            loading="lazy"
-                            className="aspect-[16/10] w-full cursor-zoom-in object-cover object-top transition-transform duration-300 hover:scale-[1.03]"
-                          />
-                        </button>
-                        <figcaption className="border-t border-border px-3 py-2 text-xs text-muted">
-                          {img.caption}
-                        </figcaption>
-                      </figure>
+                  <div className="space-y-6">
+                    {gallerySections.map((section) => (
+                      <section key={section.title}>
+                        <h5 className="mb-3 font-mono text-xs font-semibold text-accent">{section.title}</h5>
+                        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                          {section.items.map((item) => (
+                            <figure
+                              key={item.key}
+                              className={`overflow-hidden rounded-lg border border-border bg-card ${
+                                item.isGroup ? "sm:col-span-2 xl:col-span-3" : ""
+                              }`}
+                            >
+                              <button
+                                onClick={() => setLightbox({ title: item.title, images: item.images })}
+                                className="group block w-full text-left"
+                              >
+                                {item.isGroup ? (
+                                  <div className={`grid gap-2 bg-background/40 p-3 ${item.images.length > 2 ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}>
+                                    {item.images.map((image) => (
+                                      <div key={image.src} className="overflow-hidden rounded-md border border-border bg-background">
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                                        <img
+                                          src={image.src}
+                                          alt={image.caption}
+                                          loading="lazy"
+                                          className="aspect-[16/10] w-full cursor-zoom-in object-cover object-top transition-transform duration-300 group-hover:scale-[1.03]"
+                                        />
+                                      </div>
+                                    ))}
+                                  </div>
+                                ) : (
+                                  <>
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img
+                                      src={item.images[0].src}
+                                      alt={item.images[0].caption}
+                                      loading="lazy"
+                                      className="aspect-[16/10] w-full cursor-zoom-in object-cover object-top transition-transform duration-300 group-hover:scale-[1.03]"
+                                    />
+                                  </>
+                                )}
+                              </button>
+                              <figcaption className="flex items-center justify-between gap-3 border-t border-border px-3 py-2 text-xs text-muted">
+                                <span>{item.title}</span>
+                                {item.isGroup && (
+                                  <span className="shrink-0 rounded-full bg-accent-soft px-2 py-0.5 font-mono text-[11px] text-accent">
+                                    {item.images.length}단계
+                                  </span>
+                                )}
+                              </figcaption>
+                            </figure>
+                          ))}
+                        </div>
+                      </section>
                     ))}
                   </div>
                 </>
@@ -257,7 +455,7 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
       )}
 
       {/* 라이트박스 (스크린샷 확대) */}
-      {mounted && lightbox && createPortal(
+      {canUseDocument && lightbox && createPortal(
         <div
           className="fixed inset-0 z-[110] flex items-center justify-center bg-black/85 p-4"
           onClick={() => setLightbox(null)}
@@ -269,13 +467,27 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
           >
             <Icon name="close" size={20} />
           </button>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={lightbox}
-            alt=""
-            className="max-h-[90vh] max-w-full rounded-lg object-contain shadow-2xl"
+          <div
+            className="max-h-[92vh] w-full max-w-7xl overflow-y-auto rounded-lg border border-white/15 bg-background p-4 shadow-2xl sm:p-6"
             onClick={(e) => e.stopPropagation()}
-          />
+          >
+            <h3 className="mb-4 text-lg font-semibold tracking-tight">{lightbox.title}</h3>
+            <div className={lightbox.images.length > 1 ? "grid gap-4 lg:grid-cols-3" : ""}>
+              {lightbox.images.map((image) => (
+                <figure key={image.src} className="overflow-hidden rounded-lg border border-border bg-card">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={image.src}
+                    alt={image.caption}
+                    className="max-h-[72vh] w-full object-contain"
+                  />
+                  <figcaption className="border-t border-border px-3 py-2 text-sm text-muted">
+                    {image.caption}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
         </div>,
         document.body
       )}

@@ -11,7 +11,7 @@ export default function Hero() {
         <div className="hero-glow absolute inset-0" />
       </div>
 
-      <div className="relative mx-auto w-full max-w-5xl px-6 py-28 sm:py-36">
+      <div className="relative mx-auto w-full max-w-5xl px-6 pb-16 pt-20 sm:py-36">
         {profile.available && (
           <span className="animate-in inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-3 py-1 text-xs font-medium text-muted backdrop-blur">
             <span className="relative flex h-2 w-2">
@@ -22,16 +22,16 @@ export default function Hero() {
           </span>
         )}
 
-        <h1 className="animate-in mt-6 text-5xl font-bold tracking-tight sm:text-7xl" style={{ animationDelay: "0.08s" }}>
+        <h1 className="animate-in mt-6 text-4xl font-bold tracking-tight sm:text-7xl" style={{ animationDelay: "0.08s" }}>
           {profile.name}
           <span className="gradient-text mt-2 block">{profile.role}</span>
         </h1>
 
-        <p className="animate-in mt-6 max-w-xl text-lg leading-8 text-muted" style={{ animationDelay: "0.16s" }}>
+        <p className="animate-in mt-5 max-w-2xl text-base leading-7 text-foreground/80 sm:mt-6 sm:text-lg sm:leading-8" style={{ animationDelay: "0.16s" }}>
           {profile.tagline}
         </p>
 
-        <div className="animate-in mt-8 flex flex-wrap items-center gap-3" style={{ animationDelay: "0.24s" }}>
+        <div className="animate-in mt-6 flex flex-wrap items-center gap-3 sm:mt-8" style={{ animationDelay: "0.24s" }}>
           <a
             href="#projects"
             className="group inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-medium text-white shadow-lg shadow-accent/25 transition-all hover:shadow-xl hover:shadow-accent/40"
@@ -55,7 +55,7 @@ export default function Hero() {
         </div>
 
         {/* 통계 지표 */}
-        <dl className="animate-in mt-14 grid max-w-lg grid-cols-3 gap-6" style={{ animationDelay: "0.32s" }}>
+        <dl className="animate-in mt-10 grid max-w-lg grid-cols-3 gap-4 sm:mt-14 sm:gap-6" style={{ animationDelay: "0.32s" }}>
           {stats.map((s) => (
             <div key={s.label}>
               <dt className="gradient-text text-3xl font-bold tracking-tight sm:text-4xl">{s.value}</dt>
@@ -64,7 +64,7 @@ export default function Hero() {
           ))}
         </dl>
 
-        <p className="animate-in mt-10 inline-flex items-center gap-1.5 text-sm text-muted" style={{ animationDelay: "0.4s" }}>
+        <p className="animate-in mt-8 inline-flex items-center gap-1.5 text-sm text-muted sm:mt-10" style={{ animationDelay: "0.4s" }}>
           <Icon name="pin" size={15} />
           {profile.location}
         </p>

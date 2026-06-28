@@ -22,10 +22,30 @@ const notoKr = Noto_Sans_KR({
 export const metadata: Metadata = {
   title: `${profile.nameEn} · ${profile.role}`,
   description: `${profile.name} (${profile.nameEn}) — ${profile.tagline}`,
+  metadataBase: new URL("https://kbg-dev-portfolio.vercel.app"),
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: `${profile.nameEn} · ${profile.role}`,
     description: profile.tagline,
+    url: "/",
+    siteName: `${profile.nameEn} Portfolio`,
+    images: [
+      {
+        url: "/projects/univus/01-landing.png",
+        width: 1624,
+        height: 990,
+        alt: "Kim ByeongGyu backend portfolio preview",
+      },
+    ],
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${profile.nameEn} · ${profile.role}`,
+    description: profile.tagline,
+    images: ["/projects/univus/01-landing.png"],
   },
 };
 
