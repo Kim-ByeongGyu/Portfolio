@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# 개인 문서 (이력서 등) 커밋 금지
+*.docx
+*.doc
+*.hwp
+*.pdf
