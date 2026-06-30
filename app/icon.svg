@@ -1,6 +1,6 @@
 <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-  <rect width="32" height="32" rx="7" fill="#0f172a"/>
-  <text x="16" y="22" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16" font-weight="700">
-    <tspan fill="#38bdf8">{</tspan><tspan fill="#ffffff">K</tspan><tspan fill="#38bdf8">}</tspan>
+  <rect width="32" height="32" rx="6" fill="#0f172a"/>
+  <text x="16" y="22" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-weight="700" letter-spacing="-1.5">
+    <tspan fill="#38bdf8" font-size="22">{</tspan><tspan dy="-2" fill="#ffffff" font-size="16">K</tspan><tspan dy="2" fill="#38bdf8" font-size="22">}</tspan>
   </text>
 </svg>
