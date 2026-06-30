@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Kim ByeongGyu Portfolio
 
-## Getting Started
+백엔드 개발자 김병규의 포트폴리오 사이트입니다.
 
-First, run the development server:
+인증, 결제, 관리자 세션, 웹훅처럼 운영 중 문제가 되기 쉬운 흐름을 어떻게 설계하고 검증했는지 보여주는 데 초점을 둡니다.
+
+## 주요 내용
+
+- Univ-US: 대학 생활 통합 플랫폼에서 인증/인가, 구독 결제, PortOne 웹훅, Redis 세션, 관리자 채팅 담당
+- GRIP: 클라이밍장 지도 기반 정보/커뮤니티 서비스에서 데이터 수집, 지도 연동, 좋아요, 검색/페이지네이션, 배포 담당
+- 프로젝트별 문제 해결 사례: 문제, 해결, 검증 흐름을 카드와 상세 모달에서 확인 가능
+- 기술 스택: 단순 나열이 아니라 실제 프로젝트에서 사용한 맥락 기준으로 정리
+
+## 기술 스택
+
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- ESLint 9
+
+## 실행
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+개발 서버 실행 후 `http://localhost:3000`에서 확인합니다.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 검증
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npx tsc --noEmit
+npm run lint
+```
 
-## Learn More
+## 문서 파일 관리
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+이력서, PDF, HWP, DOC/DOCX 파일은 개인정보가 포함될 수 있어 `.gitignore`에서 제외합니다. 공개용 이력서가 필요하면 외부 링크 또는 별도 공개 파일로 관리합니다.

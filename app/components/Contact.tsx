@@ -22,13 +22,6 @@ export default function Contact() {
               <Icon name="mail" size={16} />
               {profile.email}
             </a>
-            <a
-              href={`mailto:${profile.emailAlt}`}
-              className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium text-muted transition-colors hover:border-accent hover:text-accent"
-            >
-              <Icon name="mail" size={16} />
-              {profile.emailAlt}
-            </a>
           </div>
 
           <div className="mt-6 flex justify-center gap-3">

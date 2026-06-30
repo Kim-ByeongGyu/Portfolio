@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { profile } from "@/lib/data";
+import Icon from "./Icon";
 
 const navItems = [
   { label: "소개", href: "#about" },
@@ -13,6 +14,46 @@ const navItems = [
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const resolveTheme = () => {
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "light" || savedTheme === "dark") return savedTheme;
+
+      return media.matches ? "dark" : "light";
+    };
+
+    const frame = window.requestAnimationFrame(() => {
+      const resolvedTheme = resolveTheme();
+      document.documentElement.dataset.theme = resolvedTheme;
+      setTheme(resolvedTheme);
+    });
+
+    const onChange = () => {
+      if (!localStorage.getItem("theme")) {
+        const resolvedTheme = resolveTheme();
+        document.documentElement.dataset.theme = resolvedTheme;
+        setTheme(resolvedTheme);
+      }
+    };
+
+    media.addEventListener("change", onChange);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      media.removeEventListener("change", onChange);
+    };
+  }, []);
+
+  const toggleTheme = () => {
+    setTheme((current) => {
+      const next = current === "dark" ? "light" : "dark";
+      document.documentElement.dataset.theme = next;
+      localStorage.setItem("theme", next);
+      return next;
+    });
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/70 backdrop-blur-md">
@@ -35,13 +76,25 @@ export default function Header() {
           ))}
         </ul>
 
-        <button
-          aria-label="메뉴 열기"
-          className="text-muted sm:hidden"
-          onClick={() => setOpen((v) => !v)}
-        >
-          <span className="block text-2xl leading-none">{open ? "✕" : "☰"}</span>
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            aria-label={theme === "dark" ? "라이트 모드로 전환" : "다크 모드로 전환"}
+            title={theme === "dark" ? "라이트 모드" : "다크 모드"}
+            onClick={toggleTheme}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border bg-card/70 text-muted transition-colors hover:border-accent hover:text-accent"
+          >
+            <Icon name={theme === "dark" ? "sun" : "moon"} size={16} />
+          </button>
+
+          <button
+            aria-label="메뉴 열기"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border bg-card/70 text-muted transition-colors hover:border-accent hover:text-accent sm:hidden"
+            onClick={() => setOpen((v) => !v)}
+          >
+            <span className="block text-xl leading-none">{open ? "✕" : "☰"}</span>
+          </button>
+        </div>
       </nav>
 
       {open && (

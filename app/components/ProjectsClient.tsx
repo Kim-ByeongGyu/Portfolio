@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import Icon from "./Icon";
 import type { Project, ProjectImage } from "@/lib/data";
@@ -22,6 +22,33 @@ type LightboxState = {
   title: string;
   images: ProjectImage[];
 };
+
+function TroubleRow({
+  label,
+  tone,
+  children,
+}: {
+  label: string;
+  tone: "problem" | "cause" | "solution" | "verification" | "lesson";
+  children: ReactNode;
+}) {
+  const toneClass = {
+    problem: "bg-rose-500/10 text-rose-500",
+    cause: "bg-amber-500/10 text-amber-500",
+    solution: "bg-emerald-500/10 text-emerald-500",
+    verification: "bg-sky-500/10 text-sky-500",
+    lesson: "bg-accent-soft text-accent",
+  }[tone];
+
+  return (
+    <div className="mt-3 grid gap-2 text-sm leading-6 sm:grid-cols-[3.5rem_1fr]">
+      <span className={`inline-flex h-6 w-14 shrink-0 items-center justify-center self-start rounded-md text-[11px] font-medium ${toneClass}`}>
+        {label}
+      </span>
+      <span className="min-w-0 text-foreground/80">{children}</span>
+    </div>
+  );
+}
 
 function buildGallerySections(images: ProjectImage[]): GallerySection[] {
   const items: GalleryItem[] = [];
@@ -167,6 +194,19 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
                   {p.description}
                 </p>
               )}
+              {p.caseStudies && p.caseStudies.length > 0 && (
+                <div className="mt-4 rounded-lg border border-accent/20 bg-accent-soft/50 p-3">
+                  <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-accent">
+                    운영 문제 해결
+                  </p>
+                  <p className="mt-1 text-sm leading-6 text-foreground/85">
+                    {p.caseStudies[0].problem}
+                  </p>
+                  <p className="mt-1 text-xs leading-5 text-muted">
+                    해결: {p.caseStudies[0].solution}
+                  </p>
+                </div>
+              )}
               <ul className="mt-4 flex flex-wrap gap-1.5">
                 {p.tags.slice(0, 5).map((t) => (
                   <li
@@ -198,11 +238,11 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
           onClick={close}
         >
           <div
-            className="relative flex max-h-[92vh] w-full max-w-7xl flex-col overflow-hidden rounded-lg border border-border bg-background shadow-2xl"
+            className="relative flex max-h-[92vh] w-full max-w-6xl flex-col overflow-hidden rounded-lg border border-border bg-background shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             {/* 헤더 (고정) */}
-            <div className="flex shrink-0 items-start justify-between gap-4 border-b border-border bg-background px-6 py-5 sm:px-8 lg:px-10">
+            <div className="flex shrink-0 items-start justify-between gap-4 border-b border-border bg-background px-6 py-5 sm:px-8">
               <div>
                 <div className="flex flex-wrap items-center gap-2">
                   <h3 className="text-xl font-bold tracking-tight">{project.title}</h3>
@@ -227,8 +267,19 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
             </div>
 
             {/* 본문 (스크롤) */}
-            <div className="flex-1 overflow-y-auto px-6 py-6 sm:px-8 lg:px-10">
+            <div className="flex-1 overflow-y-auto px-6 py-6 sm:px-8">
               <p className="max-w-5xl text-base leading-8 text-foreground/85">{project.description}</p>
+
+              {project.summary && project.summary.length > 0 && (
+                <div className="mt-5 grid gap-3 lg:grid-cols-3">
+                  {project.summary.map((item) => (
+                    <section key={item.label} className="rounded-lg border border-accent/20 bg-accent-soft/35 p-4">
+                      <h4 className="font-mono text-xs font-semibold text-accent">{item.label}</h4>
+                      <p className="mt-2 text-sm leading-6 text-foreground/85">{item.value}</p>
+                    </section>
+                  ))}
+                </div>
+              )}
 
               {project.metrics && project.metrics.length > 0 && (
                 <dl className="mt-5 grid grid-cols-3 gap-3">
@@ -241,9 +292,33 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
                 </dl>
               )}
 
+              {project.troubleshooting && project.troubleshooting.length > 0 && (
+                <>
+                  <h4 className="mt-8 mb-3 text-sm font-semibold text-foreground/90">트러블슈팅</h4>
+                  <div className="overflow-hidden rounded-lg border border-border bg-card">
+                    {project.troubleshooting.map((t) => (
+                      <section key={t.title} className="border-b border-border p-5 last:border-b-0">
+                        <p className="font-semibold">{t.title}</p>
+                        <TroubleRow label="문제" tone="problem">{t.problem}</TroubleRow>
+                        {t.cause && (
+                          <TroubleRow label="원인" tone="cause">{t.cause}</TroubleRow>
+                        )}
+                        <TroubleRow label="해결" tone="solution">{t.solution}</TroubleRow>
+                        {t.verification && (
+                          <TroubleRow label="검증" tone="verification">{t.verification}</TroubleRow>
+                        )}
+                        {t.lesson && (
+                          <TroubleRow label="배운 점" tone="lesson">{t.lesson}</TroubleRow>
+                        )}
+                      </section>
+                    ))}
+                  </div>
+                </>
+              )}
+
               {project.scope && project.scope.length > 0 && (
                 <>
-                  <h4 className="mt-7 mb-3 text-sm font-semibold text-muted">담당 범위</h4>
+                  <h4 className="mt-8 mb-3 text-sm font-semibold text-foreground/90">담당 범위</h4>
                   <div className="grid gap-3 md:grid-cols-3">
                     {project.scope.map((scope) => (
                       <section key={scope.label} className="rounded-lg border border-border bg-card p-4">
@@ -264,7 +339,7 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
 
               {project.flows && project.flows.length > 0 && (
                 <>
-                  <h4 className="mt-7 mb-3 text-sm font-semibold text-muted">아키텍처 / 핵심 흐름</h4>
+                  <h4 className="mt-8 mb-3 text-sm font-semibold text-foreground/90">아키텍처 / 핵심 흐름</h4>
                   <div className="grid gap-4 lg:grid-cols-3">
                     {project.flows.map((flow) => (
                       <section key={flow.title} className="rounded-lg border border-border bg-card p-4">
@@ -288,7 +363,7 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
 
               {project.highlights.length > 0 && (
                 <>
-                  <h4 className="mt-7 mb-3 text-sm font-semibold text-muted">주요 구현</h4>
+                  <h4 className="mt-8 mb-3 text-sm font-semibold text-foreground/90">주요 구현</h4>
                   <ul className="space-y-2.5">
                     {project.highlights.map((h) => (
                       <li key={h} className="flex items-start gap-2.5 text-sm leading-6">
@@ -302,55 +377,10 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
                 </>
               )}
 
-              {/* 트러블슈팅 */}
-              {project.troubleshooting && project.troubleshooting.length > 0 && (
-                <>
-                  <h4 className="mt-7 mb-3 text-sm font-semibold text-muted">트러블슈팅</h4>
-                  <div className="space-y-3">
-                    {project.troubleshooting.map((t) => (
-                      <div
-                        key={t.title}
-                        className="rounded-lg border border-border bg-card p-4"
-                      >
-                        <p className="font-semibold">{t.title}</p>
-                        <div className="mt-2 flex gap-2 text-sm leading-6">
-                          <span className="mt-0.5 shrink-0 rounded bg-rose-500/10 px-1.5 py-0.5 text-xs font-medium text-rose-500">
-                            문제
-                          </span>
-                          <span className="text-foreground/80">{t.problem}</span>
-                        </div>
-                        {t.cause && (
-                          <div className="mt-2 flex gap-2 text-sm leading-6">
-                            <span className="mt-0.5 shrink-0 rounded bg-amber-500/10 px-1.5 py-0.5 text-xs font-medium text-amber-500">
-                              원인
-                            </span>
-                            <span className="text-foreground/80">{t.cause}</span>
-                          </div>
-                        )}
-                        <div className="mt-2 flex gap-2 text-sm leading-6">
-                          <span className="mt-0.5 shrink-0 rounded bg-emerald-500/10 px-1.5 py-0.5 text-xs font-medium text-emerald-500">
-                            해결
-                          </span>
-                          <span className="text-foreground/80">{t.solution}</span>
-                        </div>
-                        {t.verification && (
-                          <div className="mt-2 flex gap-2 text-sm leading-6">
-                            <span className="mt-0.5 shrink-0 rounded bg-sky-500/10 px-1.5 py-0.5 text-xs font-medium text-sky-500">
-                              검증
-                            </span>
-                            <span className="text-foreground/80">{t.verification}</span>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </>
-              )}
-
               {/* 스크린샷 갤러리 */}
               {gallerySections.length > 0 && (
                 <>
-                  <h4 className="mt-7 mb-3 text-sm font-semibold text-muted">화면</h4>
+                  <h4 className="mt-8 mb-3 text-sm font-semibold text-foreground/90">화면·검증 자료</h4>
                   <div className="space-y-6">
                     {gallerySections.map((section) => (
                       <section key={section.title}>
@@ -376,7 +406,7 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
                                           src={image.src}
                                           alt={image.caption}
                                           loading="lazy"
-                                          className="aspect-[16/10] w-full cursor-zoom-in object-cover object-top transition-transform duration-300 group-hover:scale-[1.03]"
+                                          className="aspect-[16/10] w-full cursor-zoom-in object-cover object-top transition-transform duration-300 will-change-transform group-hover:scale-[1.03]"
                                         />
                                       </div>
                                     ))}
@@ -388,7 +418,7 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
                                       src={item.images[0].src}
                                       alt={item.images[0].caption}
                                       loading="lazy"
-                                      className="aspect-[16/10] w-full cursor-zoom-in object-cover object-top transition-transform duration-300 group-hover:scale-[1.03]"
+                                      className="aspect-[16/10] w-full cursor-zoom-in object-cover object-top transition-transform duration-300 will-change-transform group-hover:scale-[1.03]"
                                     />
                                   </>
                                 )}
@@ -411,7 +441,7 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
               )}
 
               {/* 태그 */}
-              <h4 className="mt-7 mb-3 text-sm font-semibold text-muted">기술 스택</h4>
+              <h4 className="mt-8 mb-3 text-sm font-semibold text-foreground/90">기술 스택</h4>
               <ul className="flex flex-wrap gap-2">
                 {project.tags.map((t) => (
                   <li
@@ -425,17 +455,18 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
 
               {/* 링크 */}
               <div className="mt-7 flex gap-3 text-sm font-medium">
-                {project.github && (
+                {(project.repoLinks ?? (project.github ? [{ label: "GitHub", href: project.github }] : [])).map((link) => (
                   <a
-                    href={project.github}
+                    key={link.href}
+                    href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 rounded-full border border-border px-4 py-2 transition-colors hover:border-accent hover:text-accent"
                   >
                     <Icon name="github" size={15} />
-                    GitHub
+                    {link.label}
                   </a>
-                )}
+                ))}
                 {project.demo && (
                   <a
                     href={project.demo}

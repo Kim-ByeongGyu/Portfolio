@@ -89,6 +89,13 @@ const paths: Record<string, React.ReactNode> = {
   ),
   check: <path d="M20 6 9 17l-5-5" />,
   close: <path d="M18 6 6 18M6 6l12 12" />,
+  sun: (
+    <>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+    </>
+  ),
+  moon: <path d="M20.99 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.78 9.79Z" />,
   cap: (
     <>
       <path d="M22 10 12 5 2 10l10 5 10-5Z" />
