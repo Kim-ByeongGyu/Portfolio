@@ -348,7 +348,7 @@ export const projects: Project[] = [
     ],
     metrics: [
       { value: "100+", label: "클라이밍장 데이터" },
-      { value: "40+", label: "운영 환경 접속자" },
+      { value: "40+", label: "AWS 배포 환경 접속" },
       { value: "4", label: "팀 프로젝트 인원" },
     ],
     cardPoints: [
