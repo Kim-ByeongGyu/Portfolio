@@ -55,8 +55,8 @@ export const principles: {
     icon: "layers",
   },
   {
-    title: "협업을 가치 있게 여깁니다",
-    desc: "PR 리뷰와 명확한 컨벤션, 역할 분배를 통해 팀이 함께 더 멀리 갈 수 있도록 합니다.",
+    title: "검증 가능한 기준을 남깁니다",
+    desc: "API 명세, QA 케이스, SQL·Swagger 검증 결과를 남겨 팀원이 같은 기준으로 확인할 수 있게 합니다.",
     icon: "users",
   },
   {
@@ -175,23 +175,23 @@ export type Project = {
 export const projects: Project[] = [
   {
     title: "Univ-US",
-    subtitle: "대학 생활 통합 플랫폼 · 인증/결제/관리자 채팅 담당",
+    subtitle: "대학 생활 통합 플랫폼 · 인증/결제/관리자 운영 API 담당",
     description:
-      "학사·커뮤니티·예약·구독 결제·AI 챗봇 등 11개 도메인을 포함한 대학 통합 서비스입니다. 팀 프로젝트에서 회원 인증/보안, 구독 결제, 관리자 대시보드 및 관리 화면, 실시간 문의 채팅, 랜딩 페이지를 담당했습니다.",
+      "학사·커뮤니티·예약·구독 결제·AI 챗봇 등 11개 도메인을 포함한 대학 통합 서비스입니다. 팀 프로젝트에서 회원 인증/보안, 구독 결제·웹훅, 관리자 대시보드 운영 API, 관리자 실시간 문의 채팅 API를 담당했습니다. 관리자 화면과 랜딩 페이지는 백엔드 기능 검증 및 서비스 흐름 연결을 위해 함께 구현했습니다.",
     summary: [
-      { label: "담당", value: "회원 인증/보안, 구독 결제·웹훅, 관리자 채팅, 관리자 화면" },
+      { label: "담당", value: "회원 인증/보안, 구독 결제·웹훅, 관리자 운영 API, 관리자 채팅 API" },
       { label: "문제", value: "결제 이력 변경, 웹훅 반복 호출, 관리자 중복 로그인처럼 운영 중 깨질 수 있는 흐름" },
       { label: "검증", value: "SQL 조회, Swagger 반복 호출, Redis 세션 충돌 흐름으로 재현·확인" },
     ],
     metrics: [
       { value: "4", label: "운영 흐름 개선" },
       { value: "26", label: "구독·결제 QA" },
-      { value: "3", label: "Redis 세션 키 계열" },
+      { value: "3", label: "핵심 문제 해결" },
     ],
     cardPoints: [
-      "결제 이력 정합성 보존 · 웹훅 중복 처리 방어 · 관리자 단일 세션 정책 적용",
-      "SQL 조회, Swagger 반복 호출, Redis 세션 충돌 흐름으로 검증 자료 정리",
-      "회원 인증/보안, 구독 결제, 관리자 채팅, 관리자 화면 담당",
+      "결제 이력 스냅샷으로 플랜 변경 후에도 과거 결제 기준 보존",
+      "PortOne 웹훅 반복 호출을 내부 결제 상태 기준으로 방어",
+      "Redis 기반 관리자 단일 세션 정책 적용",
     ],
     caseStudies: [
       {
@@ -217,7 +217,7 @@ export const projects: Project[] = [
       },
       {
         label: "내 담당",
-        items: ["회원 인증/인가", "구독 결제·웹훅", "관리자 채팅 API", "관리자 화면·랜딩"],
+        items: ["회원 인증/인가 및 보안", "구독 결제·웹훅 처리", "관리자 실시간 문의 채팅 API", "관리자 대시보드 운영 API"],
       },
       {
         label: "협업/검증",
@@ -340,11 +340,11 @@ export const projects: Project[] = [
     title: "GRIP",
     subtitle: "클라이밍장 지도 기반 정보·커뮤니티 서비스",
     description:
-      "클라이밍장 정보를 지도 기반으로 제공하는 웹 서비스입니다. Naver Search API로 수집한 서울 클라이밍장 약 100곳을 네이버 지도에 시각화하고, 게시글·댓글·좋아요·통합 검색으로 사용자 상호작용을 제공합니다. 단순 기능 구현을 넘어 기술 선택의 이유와 한계까지 정리하며 진행한 멋쟁이사자처럼 4인 팀 프로젝트입니다.",
+      "클라이밍장 정보를 지도 기반으로 제공하고 게시글·댓글·좋아요·검색 기능을 함께 제공하는 커뮤니티 서비스입니다. 팀 프로젝트에서 클라이밍장 목록/검색 API와 지도 화면 연동, 마커 정보창과 상세 페이지 이동, 혼잡도 조회 연결, 좋아요 토글 API와 중복 등록 방지 흐름을 담당했습니다.",
     summary: [
-      { label: "담당", value: "지도 기반 클라이밍장 탐색, 게시글·좋아요, 인증 흐름, AWS 배포" },
-      { label: "문제", value: "외부 검색 데이터를 서비스 데이터로 정리하고 사용자 상호작용 중복을 막아야 했음" },
-      { label: "검증", value: "지도 마커 노출, 좋아요 토글, JWT 재발급, 운영 환경 접속 흐름 확인" },
+      { label: "담당", value: "지도 조회 API, 좋아요 토글 API, 혼잡도 연동" },
+      { label: "문제", value: "DB의 클라이밍장·혼잡도 데이터를 지도 화면에 연결하고 좋아요 중복 등록을 막아야 했음" },
+      { label: "검증", value: "지도 마커·정보창, 상세 페이지/혼잡도 조회, 좋아요 등록·취소 반복 확인" },
     ],
     metrics: [
       { value: "100+", label: "클라이밍장 데이터" },
@@ -352,9 +352,9 @@ export const projects: Project[] = [
       { value: "4", label: "팀 프로젝트 인원" },
     ],
     cardPoints: [
-      "서울 클라이밍장 약 100곳 데이터 수집 · 지도 마커 시각화 · 상세 이동 연결",
-      "좋아요 토글과 중복 등록 방지 로직으로 사용자 상호작용 안정화",
-      "JWT 인증과 RefreshToken 검증 흐름을 구현하고 AWS 운영 환경에 배포",
+      "지도 마커·정보창·상세 페이지 이동 흐름 연결",
+      "혼잡도 조회 API를 상세 화면 그래프와 연동",
+      "userId + postId 기준 좋아요 토글로 중복 등록 방지",
     ],
     caseStudies: [
       {
@@ -363,25 +363,27 @@ export const projects: Project[] = [
         verification: "같은 게시글에서 좋아요를 반복 클릭해 등록과 취소가 번갈아 처리되고 중복 데이터가 쌓이지 않는지 확인했습니다.",
       },
       {
-        problem: "클라이밍장 데이터를 지도에서 탐색하려면 외부 검색 결과를 서비스 데이터로 정리해야 했습니다.",
-        solution: "Naver Search API로 이름·주소·좌표·전화번호를 수집하고 지도 마커와 상세 이동 흐름에 연결했습니다.",
-        verification: "약 100곳의 클라이밍장 데이터가 지도에 표시되고 마커 클릭 시 상세/블로그 이동 흐름이 동작하는지 확인했습니다.",
+        problem: "DB에 저장된 클라이밍장과 혼잡도 데이터를 사용자가 지도에서 바로 탐색할 수 있게 연결해야 했습니다.",
+        solution: "클라이밍장 목록/검색 API와 혼잡도 조회 API를 지도 화면에 연결하고, 마커 클릭 시 정보창과 상세 페이지 이동 흐름을 구성했습니다.",
+        verification: "지도 마커 노출, 정보창의 혼잡도 표시, 상세 페이지의 시간대별 혼잡도 그래프가 정상 동작하는지 확인했습니다.",
       },
     ],
     highlights: [
-      "Naver Search API로 서울 클라이밍장 약 100곳 데이터 수집·구축 (이름·주소·좌표·전화번호)",
-      "Naver Maps API 연동 지도 화면 — 클라이밍장 마커 시각화, 클릭 시 상세·블로그 페이지 이동",
+      "클라이밍장 목록/검색 API와 Naver Maps API 연동 — 지도 마커·정보창·상세 이동 흐름 구현",
+      "혼잡도 조회 API 연동 — 마커 정보창과 상세 페이지의 시간대별 혼잡도 그래프 연결",
       "좋아요 기능 — Like 엔티티 설계, 토글 등록/취소, 비동기 fetch로 즉시 반영 및 중복 방지 처리",
-      "게시글·클라이밍장 통합 검색 + 페이지네이션 (JPA Containing · Pageable)",
-      "JWT 인증 + Kakao OAuth2 로그인 — RefreshToken을 DB에 저장해 재발급 시 검증",
-      "AWS EC2·S3·RDS 직접 배포 — 약 40명 수강생이 접속한 운영 환경 구성",
+      "클라이밍장 상세 페이지 게시글 페이징·정렬 개선 (Pageable, 최신순 정렬)",
+      "프로젝트 공통 환경으로 Spring Security/JWT, Redis RefreshToken, Kakao OAuth2, AWS EC2/S3/RDS 배포 흐름 경험",
     ],
     tags: ["Java", "Spring Boot", "Spring Security", "JPA", "MySQL", "Redis", "AWS (EC2·S3·RDS)", "JWT", "Kakao OAuth2", "Naver Maps API"],
     images: [
-      { src: "/projects/grip/01-map.png", caption: "네이버 지도 기반 클라이밍장 화면" },
-      { src: "/projects/grip/02-prototype.png", caption: "서비스 프로토타입" },
-      { src: "/projects/grip/03-erd.png", caption: "ERD — 데이터 모델 설계" },
-      { src: "/projects/grip/04-event-storming.png", caption: "이벤트 스토밍 — 도메인 설계" },
+      { src: "/projects/grip/07-main-map.png", caption: "메인 지도 — 클라이밍장 마커·혼잡도", section: "주요 화면" },
+      { src: "/projects/grip/08-gym-detail.png", caption: "클라이밍장 상세 — 지도·시간대별 혼잡도 그래프", section: "주요 화면" },
+      { src: "/projects/grip/10-post-detail.png", caption: "게시글 상세 — 좋아요·댓글 흐름", section: "주요 화면" },
+      { src: "/projects/grip/05-architecture.svg", caption: "시스템 / AWS 구성도 (코드 기반)", section: "설계 자료" },
+      { src: "/projects/grip/06-sequence-collect.svg", caption: "지도 조회 API 연동 흐름", section: "설계 자료" },
+      { src: "/projects/grip/03-erd.png", caption: "ERD — 데이터 모델 설계", section: "설계 자료" },
+      { src: "/projects/grip/04-event-storming.png", caption: "이벤트 스토밍 — 도메인 설계", section: "설계 자료" },
     ],
     role: "Backend",
     period: "2024.07 – 2024.09",
@@ -399,15 +401,15 @@ export const projects: Project[] = [
           "같은 게시글에서 좋아요를 반복해 눌렀을 때 등록과 취소가 번갈아 처리되고, 사용자별 좋아요가 한 번만 반영되는지 확인했습니다.",
       },
       {
-        title: "JWT vs 세션 인증 방식 선택",
+        title: "지도 조회와 혼잡도 연동",
         problem:
-          "인증 방식을 세션 기반과 JWT 중 무엇으로 할지 결정해야 했습니다.",
+          "지도 화면에서는 클라이밍장 위치뿐 아니라 현재 시간대의 혼잡도까지 함께 보여줘야 했습니다.",
         cause:
-          "세션 방식은 서버가 사용자 상태를 저장·관리해야 하지만, JWT는 토큰 자체에 정보가 담겨 검증 시 별도 저장소 조회가 필요 없다는 차이가 있었습니다.",
+          "클라이밍장 기본 정보와 시간대별 혼잡도 데이터가 분리되어 있어, 지도 마커 클릭 시 필요한 데이터를 단계적으로 조회해야 했습니다.",
         solution:
-          "AccessToken 검증 시 서버가 별도 세션 저장소를 조회하지 않아도 되는 점에서 JWT가 프로젝트 구조에 더 적합하다고 판단했습니다. 다만 로그아웃·재발급 보안을 위해 RefreshToken은 DB에 저장하고 재발급 시 검증하는 구조로 구현했습니다.",
+          "지도 초기 로딩 시 클라이밍장 목록을 조회하고, 마커 클릭 시 해당 클라이밍장의 혼잡도 API를 호출해 정보창에 여유·보통·혼잡 상태를 표시했습니다.",
         verification:
-          "로그인 후 발급한 AccessToken으로 인증이 통과되고, RefreshToken으로 재발급한 뒤 인증 흐름이 정상 동작하는지 확인했습니다.",
+          "지도 마커 노출, 정보창의 혼잡도 표시, 상세 페이지의 시간대별 혼잡도 그래프가 정상 동작하는지 확인했습니다.",
       },
     ],
     github: "https://github.com/Kim-ByeongGyu/grip",

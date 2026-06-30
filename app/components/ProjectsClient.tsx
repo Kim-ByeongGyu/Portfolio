@@ -194,19 +194,6 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
                   {p.description}
                 </p>
               )}
-              {p.caseStudies && p.caseStudies.length > 0 && (
-                <div className="mt-4 rounded-lg border border-accent/20 bg-accent-soft/50 p-3">
-                  <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-accent">
-                    운영 문제 해결
-                  </p>
-                  <p className="mt-1 text-sm leading-6 text-foreground/85">
-                    {p.caseStudies[0].problem}
-                  </p>
-                  <p className="mt-1 text-xs leading-5 text-muted">
-                    해결: {p.caseStudies[0].solution}
-                  </p>
-                </div>
-              )}
               <ul className="mt-4 flex flex-wrap gap-1.5">
                 {p.tags.slice(0, 5).map((t) => (
                   <li
@@ -292,30 +279,6 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
                 </dl>
               )}
 
-              {project.troubleshooting && project.troubleshooting.length > 0 && (
-                <>
-                  <h4 className="mt-8 mb-3 text-sm font-semibold text-foreground/90">트러블슈팅</h4>
-                  <div className="overflow-hidden rounded-lg border border-border bg-card">
-                    {project.troubleshooting.map((t) => (
-                      <section key={t.title} className="border-b border-border p-5 last:border-b-0">
-                        <p className="font-semibold">{t.title}</p>
-                        <TroubleRow label="문제" tone="problem">{t.problem}</TroubleRow>
-                        {t.cause && (
-                          <TroubleRow label="원인" tone="cause">{t.cause}</TroubleRow>
-                        )}
-                        <TroubleRow label="해결" tone="solution">{t.solution}</TroubleRow>
-                        {t.verification && (
-                          <TroubleRow label="검증" tone="verification">{t.verification}</TroubleRow>
-                        )}
-                        {t.lesson && (
-                          <TroubleRow label="배운 점" tone="lesson">{t.lesson}</TroubleRow>
-                        )}
-                      </section>
-                    ))}
-                  </div>
-                </>
-              )}
-
               {project.scope && project.scope.length > 0 && (
                 <>
                   <h4 className="mt-8 mb-3 text-sm font-semibold text-foreground/90">담당 범위</h4>
@@ -355,6 +318,30 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
                             </li>
                           ))}
                         </ol>
+                      </section>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {project.troubleshooting && project.troubleshooting.length > 0 && (
+                <>
+                  <h4 className="mt-8 mb-3 text-sm font-semibold text-foreground/90">트러블슈팅</h4>
+                  <div className="overflow-hidden rounded-lg border border-border bg-card">
+                    {project.troubleshooting.map((t) => (
+                      <section key={t.title} className="border-b border-border p-5 last:border-b-0">
+                        <p className="font-semibold">{t.title}</p>
+                        <TroubleRow label="문제" tone="problem">{t.problem}</TroubleRow>
+                        {t.cause && (
+                          <TroubleRow label="원인" tone="cause">{t.cause}</TroubleRow>
+                        )}
+                        <TroubleRow label="해결" tone="solution">{t.solution}</TroubleRow>
+                        {t.verification && (
+                          <TroubleRow label="검증" tone="verification">{t.verification}</TroubleRow>
+                        )}
+                        {t.lesson && (
+                          <TroubleRow label="배운 점" tone="lesson">{t.lesson}</TroubleRow>
+                        )}
                       </section>
                     ))}
                   </div>
