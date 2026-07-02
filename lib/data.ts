@@ -284,6 +284,7 @@ export const projects: Project[] = [
         caption: "결제 이력 스냅샷 검증 SQL 및 결과",
         section: "검증·설계 자료",
       },
+      { src: "/projects/univus/19-architecture.png", caption: "시스템 아키텍처 및 연동 구조", section: "검증·설계 자료" },
     ],
     role: "Backend",
     period: "2026.05 – 2026.06",

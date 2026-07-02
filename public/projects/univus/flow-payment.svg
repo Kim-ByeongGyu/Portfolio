@@ -1,0 +1,173 @@
+<svg width="1180" height="1440" viewBox="0 0 1180 1440" xmlns="http://www.w3.org/2000/svg" font-family="ui-sans-serif, system-ui, 'Malgun Gothic', sans-serif">
+  <rect width="1180" height="1440" fill="#ffffff"/>
+  <defs>
+    <marker id="pa" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#111827" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <text x="590" y="46" text-anchor="middle" font-size="27" font-weight="700" fill="#111827">정기구독 결제 플로우</text>
+  <text x="590" y="76" text-anchor="middle" font-size="14" fill="#6b7280">PortOne billingKey 기반 최초 결제 · 다음 회차 예약 · 웹훅 검증/반영 흐름</text>
+
+  <g stroke="#111827" stroke-width="1.5" fill="none">
+    <!-- main column vertical arrows -->
+    <path d="M380 200 V232" marker-end="url(#pa)"/>
+    <path d="M380 330 V347" marker-end="url(#pa)"/>
+    <path d="M380 447 V477" marker-end="url(#pa)"/>
+    <path d="M380 579 V610" marker-end="url(#pa)"/>
+    <path d="M380 704 V737" marker-end="url(#pa)"/>
+    <path d="M380 833 V849" marker-end="url(#pa)"/>
+    <path d="M380 947 V977" marker-end="url(#pa)"/>
+    <path d="M380 1079 V1110" marker-end="url(#pa)"/>
+    <path d="M380 1204 V1237" marker-end="url(#pa)"/>
+    <path d="M380 1331 V1357" marker-end="url(#pa)"/>
+    <!-- start to plan -->
+    <path d="M162 150 H230" marker-end="url(#pa)"/>
+    <!-- 진행가능 아니오 -> 409 -->
+    <path d="M260 397 H194" marker-end="url(#pa)"/>
+    <!-- 결제성공 아니오 -> FAILED -->
+    <path d="M260 897 H194" marker-end="url(#pa)"/>
+    <!-- right column arrows -->
+    <path d="M850 569 V600" marker-end="url(#pa)"/>
+    <path d="M850 698 V717" marker-end="url(#pa)"/>
+    <path d="M850 807 V855" marker-end="url(#pa)"/>
+    <path d="M850 937 V952" marker-end="url(#pa)"/>
+    <path d="M850 1042 V1075" marker-end="url(#pa)"/>
+    <!-- DB대상 아니오 -> 200 무시 -->
+    <path d="M968 760 H1013" marker-end="url(#pa)"/>
+    <!-- PAID 아니오 -> 실패기록 -->
+    <path d="M968 995 H1090 V1075" marker-end="url(#pa)"/>
+    <!-- to 200 OK 응답 -->
+    <path d="M850 1173 V1200 H905 V1232" marker-end="url(#pa)"/>
+    <path d="M1090 1173 V1200 H975 V1232" marker-end="url(#pa)"/>
+  </g>
+
+  <!-- dashed cross links -->
+  <g stroke="#6b7280" stroke-width="1.4" fill="none" stroke-dasharray="6 5">
+    <!-- 다음 회차 예약(예약 실행) -> 웹훅 수신 -->
+    <path d="M530 1156 H660 V521 H700" marker-end="url(#pa)"/>
+    <!-- 웹훅 결과 저장 -> 예약 정보 저장 갱신 -->
+    <path d="M700 1123 H612 V1283 H530" marker-end="url(#pa)"/>
+  </g>
+  <text x="672" y="515" font-size="11.5" fill="#6b7280">예약 실행</text>
+  <text x="540" y="1108" font-size="11.5" fill="#6b7280">다음 회차 예약 갱신</text>
+  <text x="228" y="390" font-size="12" fill="#374151">아니오</text>
+  <text x="392" y="470" font-size="12" fill="#374151">예</text>
+  <text x="228" y="890" font-size="12" fill="#374151">아니오</text>
+  <text x="392" y="972" font-size="12" fill="#374151">예</text>
+  <text x="980" y="752" font-size="12" fill="#374151">아니오</text>
+  <text x="980" y="988" font-size="12" fill="#374151">아니오</text>
+  <text x="862" y="848" font-size="12" fill="#374151">예</text>
+  <text x="862" y="1070" font-size="12" fill="#374151">예</text>
+
+  <!-- ===== nodes ===== -->
+  <g font-size="16" font-weight="700" fill="#111827" text-anchor="middle">
+    <!-- 시작 -->
+    <rect x="22" y="122" width="140" height="56" rx="28" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="92" y="156">시작</text>
+    <!-- 구독 유지 -->
+    <rect x="280" y="1357" width="200" height="54" rx="27" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="380" y="1390">구독 유지</text>
+  </g>
+
+  <!-- process boxes -->
+  <g>
+    <!-- 플랜 선택 -->
+    <rect x="230" y="120" width="300" height="80" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="380" y="150" text-anchor="middle" font-size="16" font-weight="700" fill="#111827">플랜 선택</text>
+    <text x="380" y="174" text-anchor="middle" font-size="12.5" fill="#4b5563">planId · 학교 정보 입력</text>
+    <!-- 구독 준비 -->
+    <rect x="230" y="232" width="300" height="96" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="380" y="262" text-anchor="middle" font-size="16" font-weight="700" fill="#111827">구독 준비</text>
+    <text x="380" y="285" text-anchor="middle" font-size="12" fill="#4b5563">POST /api/subscriptions/prepare</text>
+    <text x="380" y="305" text-anchor="middle" font-size="12" fill="#4b5563">플랜 · 학교 · 중복 구독 검증</text>
+    <!-- 409 충돌 -->
+    <rect x="24" y="362" width="170" height="72" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="109" y="392" text-anchor="middle" font-size="15" font-weight="700" fill="#111827">409 충돌</text>
+    <text x="109" y="413" text-anchor="middle" font-size="11.5" fill="#4b5563">중복 구독 / 검증 실패</text>
+    <!-- PortOne 빌링키 -->
+    <rect x="230" y="610" width="300" height="94" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="380" y="640" text-anchor="middle" font-size="16" font-weight="700" fill="#111827">PortOne 빌링키 발급창</text>
+    <text x="380" y="663" text-anchor="middle" font-size="12" fill="#4b5563">requestIssueBillingKey</text>
+    <text x="380" y="683" text-anchor="middle" font-size="12" fill="#4b5563">billingKey 발급 후 서버 전달</text>
+    <!-- 최초 결제 요청 -->
+    <rect x="230" y="737" width="300" height="96" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="380" y="765" text-anchor="middle" font-size="16" font-weight="700" fill="#111827">최초 결제 요청</text>
+    <text x="380" y="788" text-anchor="middle" font-size="11.5" fill="#4b5563">BE POST /api/subscriptions/payments/billing</text>
+    <text x="380" y="808" text-anchor="middle" font-size="11.5" fill="#4b5563">PortOne POST /payments/{id}/billing-key</text>
+    <!-- FAILED 처리 -->
+    <rect x="24" y="862" width="170" height="72" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="109" y="892" text-anchor="middle" font-size="15" font-weight="700" fill="#111827">FAILED 처리</text>
+    <text x="109" y="913" text-anchor="middle" font-size="11.5" fill="#4b5563">PAYMENT=FAILED · 금지</text>
+    <!-- 다음 회차 예약 -->
+    <rect x="230" y="1110" width="300" height="94" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="380" y="1140" text-anchor="middle" font-size="16" font-weight="700" fill="#111827">다음 회차 예약</text>
+    <text x="380" y="1163" text-anchor="middle" font-size="11.5" fill="#4b5563">PortOne POST /payments/{id}/schedule</text>
+    <text x="380" y="1183" text-anchor="middle" font-size="11.5" fill="#4b5563">nextBillingAt 기준 예약 생성</text>
+
+    <!-- 웹훅 수신 -->
+    <rect x="700" y="475" width="300" height="94" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="850" y="505" text-anchor="middle" font-size="16" font-weight="700" fill="#111827">정기결제 웹훅 수신</text>
+    <text x="850" y="528" text-anchor="middle" font-size="11.5" fill="#4b5563">POST /api/subscriptions/webhooks/portone</text>
+    <text x="850" y="548" text-anchor="middle" font-size="11.5" fill="#4b5563">예약 결제 결과 수신</text>
+    <!-- 검증/멱등성 -->
+    <rect x="700" y="600" width="300" height="96" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="850" y="630" text-anchor="middle" font-size="16" font-weight="700" fill="#111827">웹훅 검증 / 멱등성</text>
+    <text x="850" y="653" text-anchor="middle" font-size="11.5" fill="#4b5563">signature 또는 PortOne 재조회</text>
+    <text x="850" y="673" text-anchor="middle" font-size="11.5" fill="#4b5563">merchantUid 중복 처리 방지</text>
+    <!-- 200 OK 무시 -->
+    <rect x="1013" y="726" width="152" height="70" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="1089" y="756" text-anchor="middle" font-size="14" font-weight="700" fill="#111827">200 OK 무시</text>
+    <text x="1089" y="776" text-anchor="middle" font-size="11" fill="#4b5563">대상 없음 / READY 아님</text>
+    <!-- 결제 결과 재조회 -->
+    <rect x="700" y="855" width="300" height="82" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="850" y="888" text-anchor="middle" font-size="16" font-weight="700" fill="#111827">결제 결과 재조회</text>
+    <text x="850" y="912" text-anchor="middle" font-size="12" fill="#4b5563">PortOne GET /payments/{id}</text>
+    <!-- 200 OK 응답 -->
+    <rect x="760" y="1232" width="280" height="76" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="900" y="1263" text-anchor="middle" font-size="15" font-weight="700" fill="#111827">200 OK 응답</text>
+    <text x="900" y="1284" text-anchor="middle" font-size="11.5" fill="#4b5563">재시도 방지</text>
+  </g>
+
+  <!-- decision diamonds -->
+  <g fill="#fff" stroke="#111827" stroke-width="1.5">
+    <polygon points="380,347 505,397 380,447 255,397"/>
+    <polygon points="380,849 505,897 380,945 255,897"/>
+    <polygon points="850,717 968,760 850,803 732,760"/>
+    <polygon points="850,952 968,995 850,1038 732,995"/>
+  </g>
+  <g text-anchor="middle" fill="#111827">
+    <text x="380" y="393" font-size="15" font-weight="700">진행 가능?</text>
+    <text x="380" y="412" font-size="11" fill="#4b5563">중복 구독 / 1회만 오류</text>
+    <text x="380" y="893" font-size="15" font-weight="700">결제 성공?</text>
+    <text x="380" y="912" font-size="11" fill="#4b5563">PAID · amount · id 검증</text>
+    <text x="850" y="757" font-size="14" font-weight="700">우리 DB 대상?</text>
+    <text x="850" y="775" font-size="11" fill="#4b5563">paymentId · READY</text>
+    <text x="850" y="992" font-size="14" font-weight="700">PAID?</text>
+    <text x="850" y="1010" font-size="11" fill="#4b5563">실제 결제 기록</text>
+  </g>
+
+  <!-- cylinders (storage) -->
+  <g fill="#fff" stroke="#111827" stroke-width="1.5">
+    <path d="M230 492 a150 14 0 0 1 300 0 v72 a150 14 0 0 1 -300 0 z"/>
+    <path d="M230 992 a150 14 0 0 1 300 0 v72 a150 14 0 0 1 -300 0 z"/>
+    <path d="M230 1251 a150 13 0 0 1 300 0 v62 a150 13 0 0 1 -300 0 z"/>
+    <path d="M700 1091 a150 13 0 0 1 300 0 v66 a150 13 0 0 1 -300 0 z"/>
+    <path d="M1013 1091 a76 11 0 0 1 152 0 v66 a76 11 0 0 1 -152 0 z"/>
+  </g>
+  <g text-anchor="middle">
+    <text x="380" y="514" font-size="15" font-weight="700" fill="#111827">구독 준비값 저장</text>
+    <text x="380" y="536" font-size="11.5" fill="#4b5563">SUBSCRIPTION=PENDING</text>
+    <text x="380" y="554" font-size="11.5" fill="#4b5563">PAYMENT_HISTORY=READY · snapshot</text>
+    <text x="380" y="1013" font-size="15" font-weight="700" fill="#111827">구독 활성화 저장</text>
+    <text x="380" y="1035" font-size="11.5" fill="#4b5563">billingKey · PAYMENT=PAID</text>
+    <text x="380" y="1053" font-size="11.5" fill="#4b5563">SUBSCRIPTION=ACTIVE · ROLE</text>
+    <text x="380" y="1274" font-size="15" font-weight="700" fill="#111827">예약 정보 저장</text>
+    <text x="380" y="1295" font-size="11.5" fill="#4b5563">scheduledAt 저장</text>
+    <text x="850" y="1112" font-size="15" font-weight="700" fill="#111827">웹훅 결과 저장</text>
+    <text x="850" y="1132" font-size="11" fill="#4b5563">Failed면 상태 Paid 반영</text>
+    <text x="850" y="1150" font-size="11" fill="#4b5563">다음 회차 예약 갱신</text>
+    <text x="1089" y="1112" font-size="14" font-weight="700" fill="#111827">실패 기록 저장</text>
+    <text x="1089" y="1131" font-size="10.5" fill="#4b5563">PAYMENT=FAILED</text>
+    <text x="1089" y="1148" font-size="10.5" fill="#4b5563">PAST_DUE/SUSPENDED</text>
+  </g>
+</svg>

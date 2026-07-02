@@ -1,0 +1,116 @@
+<svg width="1900" height="1050" viewBox="0 0 1900 1050" xmlns="http://www.w3.org/2000/svg" font-family="ui-sans-serif, system-ui, 'Malgun Gothic', sans-serif">
+  <rect width="1900" height="1050" fill="#ffffff"/>
+  <defs>
+    <marker id="ea" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#111827" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <text x="950" y="46" text-anchor="middle" font-size="27" font-weight="700" fill="#111827">수강신청 플로우</text>
+  <text x="950" y="76" text-anchor="middle" font-size="14" fill="#6b7280">CAPTCHA · 처리 큐 · Redis 분산 락 · DB 락 검증 · WebSocket 결과 알림</text>
+
+  <g stroke="#111827" stroke-width="1.5" fill="none">
+    <path d="M180 245 H260" marker-end="url(#ea)"/>
+    <path d="M500 245 H560" marker-end="url(#ea)"/>
+    <path d="M800 245 H860" marker-end="url(#ea)"/>
+    <path d="M1100 245 H1160" marker-end="url(#ea)"/>
+    <path d="M1280 295 V495" marker-end="url(#ea)"/>
+    <path d="M1160 545 H1075" marker-end="url(#ea)"/>
+    <path d="M825 545 H755" marker-end="url(#ea)"/>
+    <path d="M515 545 H445" marker-end="url(#ea)"/>
+    <path d="M950 595 V650" marker-end="url(#ea)"/>
+    <path d="M325 590 V700 H430 V785" marker-end="url(#ea)"/>
+    <path d="M205 545 H160 V815" marker-end="url(#ea)"/>
+    <path d="M300 865 H280" marker-end="url(#ea)"/>
+    <path d="M560 865 H680" marker-end="url(#ea)"/>
+    <path d="M920 865 H1000" marker-end="url(#ea)"/>
+    <path d="M1240 865 H1320" marker-end="url(#ea)"/>
+    <path d="M1560 865 H1660" marker-end="url(#ea)"/>
+  </g>
+
+  <g stroke="#6b7280" stroke-width="1.4" fill="none" stroke-dasharray="6 5">
+    <path d="M160 915 V990 H1440 V910" marker-end="url(#ea)"/>
+  </g>
+
+  <text x="770" y="533" font-size="12" fill="#374151">여유</text>
+  <text x="960" y="620" font-size="12" fill="#374151">포화</text>
+  <text x="450" y="533" font-size="12" fill="#374151">워커 큐 처리</text>
+  <text x="165" y="533" font-size="12" fill="#374151">경합(3s 초과)</text>
+  <text x="335" y="650" font-size="12" fill="#374151">획득 성공</text>
+  <text x="283" y="853" font-size="12" fill="#374151">실패</text>
+  <text x="600" y="853" font-size="12" fill="#374151">통과</text>
+  <text x="170" y="1005" font-size="11" fill="#6b7280">실패해도 결과는 알림</text>
+
+  <!-- terminals -->
+  <g text-anchor="middle" dominant-baseline="central">
+    <rect x="40" y="217" width="140" height="56" rx="28" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="110" y="245" font-size="16" font-weight="700" fill="#111827">시작</text>
+    <rect x="1660" y="837" width="180" height="56" rx="28" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="1750" y="865" font-size="16" font-weight="700" fill="#111827">신청 완료</text>
+  </g>
+
+  <!-- cylinders -->
+  <g fill="#fff" stroke="#111827" stroke-width="1.5">
+    <path d="M260 199 a120 14 0 0 1 240 0 v92 a120 14 0 0 1 -240 0 z"/>
+    <path d="M1000 837 a120 14 0 0 1 240 0 v56 a120 14 0 0 1 -240 0 z"/>
+  </g>
+  <g text-anchor="middle" dominant-baseline="central">
+    <text x="380" y="245" font-size="15" font-weight="700" fill="#111827">LECTURE / 정원</text>
+    <text x="1120" y="865" font-size="13" font-weight="700" fill="#111827">STUDENT_ENROLLMENT</text>
+  </g>
+
+  <!-- process boxes -->
+  <g text-anchor="middle" dominant-baseline="central">
+    <rect x="560" y="195" width="240" height="100" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="680" y="231" font-size="16" font-weight="700" fill="#111827">개설 강좌 조회</text>
+    <text x="680" y="259" font-size="11.5" fill="#4b5563">GET /enroll/lectures</text>
+
+    <rect x="860" y="195" width="240" height="100" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="980" y="231" font-size="16" font-weight="700" fill="#111827">장바구니 담기</text>
+    <text x="980" y="259" font-size="11" fill="#4b5563">시간표 충돌 시 비활성 · FE</text>
+
+    <rect x="1160" y="195" width="240" height="100" fill="#fff" stroke="#111827" stroke-width="1.5" stroke-dasharray="6 5"/>
+    <text x="1280" y="231" font-size="16" font-weight="700" fill="#111827">CAPTCHA 인증</text>
+    <text x="1280" y="259" font-size="11" fill="#4b5563">FE 전용 · 서버 미검증</text>
+
+    <rect x="1160" y="495" width="240" height="100" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="1280" y="531" font-size="16" font-weight="700" fill="#111827">일괄 신청 요청</text>
+    <text x="1280" y="559" font-size="11" fill="#4b5563">POST /enroll { lecIds }</text>
+
+    <rect x="515" y="500" width="240" height="90" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="635" y="531" font-size="16" font-weight="700" fill="#111827">접수 202</text>
+    <text x="635" y="559" font-size="11" fill="#4b5563">requestId</text>
+
+    <rect x="205" y="500" width="240" height="90" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="325" y="531" font-size="16" font-weight="700" fill="#111827">Redis 분산 락 시도</text>
+    <text x="325" y="559" font-size="11" fill="#4b5563">lecId별 tryLock(3s)</text>
+
+    <rect x="830" y="650" width="240" height="90" fill="#fff" stroke="#111827" stroke-width="1.5" stroke-dasharray="6 5"/>
+    <text x="950" y="681" font-size="15" font-weight="700" fill="#111827">[시스템 알림]</text>
+    <text x="950" y="709" font-size="11" fill="#4b5563">503 · 잠시 후 재시도</text>
+
+    <rect x="40" y="815" width="240" height="100" fill="#fff" stroke="#111827" stroke-width="1.5" stroke-dasharray="6 5"/>
+    <text x="160" y="851" font-size="15" font-weight="700" fill="#111827">실패 사유 기록</text>
+    <text x="160" y="879" font-size="11" fill="#4b5563">경합 초과 · 검증 실패</text>
+
+    <rect x="680" y="820" width="240" height="90" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="800" y="851" font-size="16" font-weight="700" fill="#111827">신청 저장 (INSERT)</text>
+    <text x="800" y="879" font-size="10.5" fill="#4b5563">상태 · 정원 · 시간표 · 학점 반영</text>
+
+    <rect x="1320" y="820" width="240" height="90" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="1440" y="851" font-size="15" font-weight="700" fill="#111827">결과 WebSocket 푸시</text>
+    <text x="1440" y="879" font-size="10.5" fill="#4b5563">/user/queue/lms/enroll-result</text>
+  </g>
+
+  <!-- diamonds -->
+  <g fill="#fff" stroke="#111827" stroke-width="1.5">
+    <polygon points="950,495 1075,545 950,595 825,545"/>
+    <polygon points="430,785 560,865 430,945 300,865"/>
+  </g>
+  <g text-anchor="middle" dominant-baseline="central" fill="#111827">
+    <text x="950" y="531" font-size="15" font-weight="700">처리 큐 여유?</text>
+    <text x="950" y="559" font-size="10.5" fill="#4b5563">BlockingQueue 500</text>
+    <text x="430" y="845" font-size="14" font-weight="700">DB 락 후 검증</text>
+    <text x="430" y="865" font-size="9.5" fill="#4b5563">SELECT FOR UPDATE</text>
+    <text x="430" y="885" font-size="9.5" fill="#4b5563">상태·정원·시간표·학점·중복</text>
+  </g>
+</svg>

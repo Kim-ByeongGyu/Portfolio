@@ -1,0 +1,137 @@
+<svg width="1180" height="1690" viewBox="0 0 1180 1690" xmlns="http://www.w3.org/2000/svg" font-family="ui-sans-serif, system-ui, 'Malgun Gothic', sans-serif">
+  <rect width="1180" height="1690" fill="#ffffff"/>
+  <defs>
+    <marker id="aa" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#111827" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <text x="560" y="46" text-anchor="middle" font-size="27" font-weight="700" fill="#111827">로그인 · 인증 플로우</text>
+  <text x="560" y="76" text-anchor="middle" font-size="14" fill="#6b7280">CSRF · HttpOnly 쿠키 · Redis 세션 · JWT 필터 기반 인증 흐름</text>
+
+  <g stroke="#111827" stroke-width="1.5" fill="none">
+    <path d="M200 139 H380" marker-end="url(#aa)"/>
+    <path d="M550 204 V240" marker-end="url(#aa)"/>
+    <path d="M550 326 V372" marker-end="url(#aa)"/>
+    <path d="M550 466 V478" marker-end="url(#aa)"/>
+    <path d="M680 530 H900" marker-end="url(#aa)"/>
+    <path d="M550 582 V628" marker-end="url(#aa)"/>
+    <path d="M690 680 H900" marker-end="url(#aa)"/>
+    <path d="M550 732 V782" marker-end="url(#aa)"/>
+    <path d="M550 858 V895" marker-end="url(#aa)"/>
+    <path d="M550 995 V1035" marker-end="url(#aa)"/>
+    <path d="M550 1111 V1145" marker-end="url(#aa)"/>
+    <!-- split from 로그인 완료 -->
+    <path d="M550 1197 V1222 H180 V1260" marker-end="url(#aa)"/>
+    <path d="M550 1197 V1222 H990 V1310" marker-end="url(#aa)"/>
+    <!-- protected api chain -->
+    <path d="M180 1332 V1362" marker-end="url(#aa)"/>
+    <path d="M180 1450 V1478" marker-end="url(#aa)"/>
+    <path d="M305 1520 H430" marker-end="url(#aa)"/>
+    <path d="M560 1570 V1610" marker-end="url(#aa)"/>
+    <!-- session valid -> reissue / logout -->
+    <path d="M690 1520 H830 V1355 H855" marker-end="url(#aa)"/>
+    <path d="M760 1520 H855" marker-end="url(#aa)"/>
+  </g>
+
+  <text x="770" y="520" font-size="12" fill="#374151">아니오</text>
+  <text x="560" y="612" font-size="12" fill="#374151">예</text>
+  <text x="748" y="670" font-size="12" fill="#374151">예(충돌)</text>
+  <text x="560" y="768" font-size="12" fill="#374151">아니오 / forceLogin</text>
+  <text x="572" y="1596" font-size="12" fill="#374151">예</text>
+  <text x="792" y="1348" font-size="12" fill="#374151">만료</text>
+  <text x="770" y="1512" font-size="12" fill="#374151">종료</text>
+
+  <!-- terminals -->
+  <g text-anchor="middle">
+    <rect x="60" y="112" width="140" height="54" rx="27" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="130" y="145" font-size="16" font-weight="700" fill="#111827">시작</text>
+    <rect x="460" y="1610" width="200" height="54" rx="10" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="560" y="1643" font-size="16" font-weight="700" fill="#111827">API 처리</text>
+    <rect x="440" y="1145" width="220" height="52" rx="8" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="550" y="1177" font-size="16" font-weight="700" fill="#111827">로그인 완료</text>
+  </g>
+
+  <!-- parallelogram: 로그인 요청 -->
+  <polygon points="418,240 720,240 702,326 400,326" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+  <g text-anchor="middle">
+    <text x="560" y="270" font-size="16" font-weight="700" fill="#111827">로그인 요청</text>
+    <text x="560" y="293" font-size="11.5" fill="#4b5563">POST /api/auth/admin/login · /user/login</text>
+    <text x="560" y="313" font-size="11.5" fill="#4b5563">CSRF 헤더 포함</text>
+  </g>
+
+  <!-- process boxes -->
+  <g text-anchor="middle">
+    <rect x="380" y="110" width="340" height="94" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="550" y="140" font-size="16" font-weight="700" fill="#111827">CSRF 토큰 준비</text>
+    <text x="550" y="164" font-size="12" fill="#4b5563">GET /api/auth/csrf</text>
+    <text x="550" y="184" font-size="12" fill="#4b5563">변경 요청에 X-XSRF-TOKEN 사용</text>
+
+    <rect x="380" y="372" width="340" height="94" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="550" y="402" font-size="16" font-weight="700" fill="#111827">계정 검증</text>
+    <text x="550" y="425" font-size="12" fill="#4b5563">회원 조회 · 비밀번호 확인</text>
+    <text x="550" y="445" font-size="12" fill="#4b5563">허용 역할 검증</text>
+
+    <rect x="900" y="496" width="210" height="70" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="1005" y="525" font-size="15" font-weight="700" fill="#111827">401 응답</text>
+    <text x="1005" y="547" font-size="11.5" fill="#4b5563">로그인 실패</text>
+
+    <rect x="900" y="644" width="210" height="76" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="1005" y="674" font-size="15" font-weight="700" fill="#111827">409 충돌</text>
+    <text x="1005" y="696" font-size="11" fill="#4b5563">ADMIN_SESSION_CONFLICT</text>
+
+    <rect x="380" y="782" width="340" height="76" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="550" y="812" font-size="16" font-weight="700" fill="#111827">기존 세션 정리</text>
+    <text x="550" y="834" font-size="11.5" fill="#4b5563">forceLogin이면 기존 관리자 세션 삭제</text>
+
+    <rect x="380" y="1035" width="340" height="76" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="550" y="1065" font-size="16" font-weight="700" fill="#111827">쿠키 발급</text>
+    <text x="550" y="1088" font-size="11.5" fill="#4b5563">Access / Refresh HttpOnly Set-Cookie</text>
+
+    <rect x="55" y="1260" width="250" height="72" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="180" y="1290" font-size="15" font-weight="700" fill="#111827">보호 API 요청</text>
+    <text x="180" y="1312" font-size="11.5" fill="#4b5563">Access Cookie 포함</text>
+
+    <rect x="55" y="1362" width="250" height="88" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="180" y="1392" font-size="15" font-weight="700" fill="#111827">JWT 필터 검증</text>
+    <text x="180" y="1414" font-size="11" fill="#4b5563">서명/만료 확인 후</text>
+    <text x="180" y="1432" font-size="11" fill="#4b5563">sessionId 추출</text>
+
+    <rect x="855" y="1310" width="270" height="90" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="990" y="1340" font-size="15" font-weight="700" fill="#111827">토큰 재발급</text>
+    <text x="990" y="1362" font-size="11" fill="#4b5563">401 시 /api/auth/refresh</text>
+    <text x="990" y="1382" font-size="11" fill="#4b5563">Redis refresh 조회 · 회전</text>
+
+    <rect x="855" y="1470" width="270" height="90" fill="#fff" stroke="#111827" stroke-width="1.5"/>
+    <text x="990" y="1500" font-size="15" font-weight="700" fill="#111827">로그아웃</text>
+    <text x="990" y="1522" font-size="11" fill="#4b5563">POST /api/auth/logout</text>
+    <text x="990" y="1542" font-size="11" fill="#4b5563">Redis 세션 삭제 · 쿠키 만료</text>
+  </g>
+
+  <!-- diamonds -->
+  <g fill="#fff" stroke="#111827" stroke-width="1.5">
+    <polygon points="550,478 685,530 550,582 415,530"/>
+    <polygon points="550,628 692,680 550,732 408,680"/>
+    <polygon points="560,1470 692,1520 560,1570 428,1520"/>
+  </g>
+  <g text-anchor="middle" fill="#111827">
+    <text x="550" y="527" font-size="15" font-weight="700">인증 성공?</text>
+    <text x="550" y="545" font-size="10.5" fill="#4b5563">실패 시 LOGIN_LOG 기록</text>
+    <text x="550" y="677" font-size="14" font-weight="700">관리자 세션 충돌?</text>
+    <text x="550" y="695" font-size="10.5" fill="#4b5563">ADMIN/SUA 현재 세션 확인</text>
+    <text x="560" y="1517" font-size="15" font-weight="700">세션 유효?</text>
+    <text x="560" y="1535" font-size="10.5" fill="#4b5563">없으면 401/403</text>
+  </g>
+
+  <!-- cylinders -->
+  <g fill="#fff" stroke="#111827" stroke-width="1.5">
+    <path d="M380 909 a170 15 0 0 1 340 0 v72 a170 15 0 0 1 -340 0 z"/>
+    <path d="M55 1492 a125 13 0 0 1 250 0 v58 a125 13 0 0 1 -250 0 z"/>
+  </g>
+  <g text-anchor="middle">
+    <text x="550" y="940" font-size="16" font-weight="700" fill="#111827">Redis 세션 저장</text>
+    <text x="550" y="962" font-size="11.5" fill="#4b5563">auth-session · auth-refresh</text>
+    <text x="550" y="981" font-size="11.5" fill="#4b5563">auth:admin-session · member-sessions</text>
+    <text x="180" y="1520" font-size="14" font-weight="700" fill="#111827">Redis 세션 확인</text>
+    <text x="180" y="1540" font-size="11" fill="#4b5563">세션 유효 여부 확인</text>
+  </g>
+</svg>
